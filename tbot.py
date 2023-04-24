@@ -61,7 +61,7 @@ def create_msg(text=None):
     return text, P_EMAIL
 
 
-print('Starting phishers paypack..')
+print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\tStarting phishers paypack..')
 parser = argparse.ArgumentParser(description="This bot is made to fight against telegram phishing bots. It will does that with sending many randomized messages. Goal is it, that the phisher kicks out the bot and disables the used token with it.")
 parser.add_argument('--bot-id', type=str, help="ID of telegram bot", required=True)
 parser.add_argument('--token', type=str, help="Token of telegram bot", required=True)
@@ -121,7 +121,7 @@ for i in range(max_msgs):
     txt, email = create_msg(args.text)
     ret = send_message(txt)
     time.sleep(random.randint(args.min_sleep, args.max_sleep))
-    print(f'{datetime.now}\t{ret}\tSending {i}/{max_msgs}\t[{email}]')
+    print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t{ret}\tSending {i}/{max_msgs}\t[{email}]')
     if ret > 400:
         end = time.time()
         duration = end - start
@@ -132,5 +132,17 @@ for i in range(max_msgs):
         elif duration >=3600:
             duration = duration / 60 / 60
             unit = "h"
-        print(f'{datetime.now}\tBot disabled after {i} messages. [{duration}{unit}]')
+        print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\tBot disabled after {i} messages. [{duration}{unit}]')
         sys.exit(0)
+
+end = time.time()
+duration = end - start
+unit = "s"
+if duration >=60:
+    duration = duration / 60
+    unit = "m"
+elif duration >=3600:
+    duration = duration / 60 / 60
+    unit = "h"
+print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\tBot still active after {i} messages. [{duration}{unit}]')
+sys.exit(0)   
