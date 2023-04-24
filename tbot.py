@@ -9,6 +9,20 @@ import argparse
 import urllib.parse
 from datetime import datetime
 
+
+header = """
+_________ ______   _______ _________
+\__   __/(  ___ \ (  ___  )\__   __/
+   ) (   | (   ) )| (   ) |   ) (   
+   | |   | (__/ / | |   | |   | |   
+   | |   |  __ (  | |   | |   | |   
+   | |   | (  \ \ | |   | |   | |   
+   | |   | )___) )| (___) |   | |   
+   )_(   |/ \___/ (_______)   )_(   
+                                    
+"""
+print(header)
+
 def get_list(path):
     wordlist = []
     with open(path, "r") as f:
@@ -61,7 +75,6 @@ def create_msg(text=None):
     return text, P_EMAIL
 
 
-print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\tStarting phishers paypack..')
 parser = argparse.ArgumentParser(description="This bot is made to fight against telegram phishing bots. It will does that with sending many randomized messages. Goal is it, that the phisher kicks out the bot and disables the used token with it.")
 parser.add_argument('--bot-id', type=str, help="ID of telegram bot", required=True)
 parser.add_argument('--token', type=str, help="Token of telegram bot", required=True)
@@ -107,6 +120,7 @@ if not os.path.isfile(args.city_list):
     print(f'Please define wordlist path for: --city-list')
     sys.exit(0)
 
+print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t\tStarting phishers paypack..')
 name_list_path = pathlib.Path(args.name_list)
 family_name_list_path = pathlib.Path(args.surname_list)
 domain_list_path = pathlib.Path(args.domain_list)
@@ -121,7 +135,7 @@ for i in range(max_msgs):
     txt, email = create_msg(args.text)
     ret = send_message(txt)
     time.sleep(random.randint(args.min_sleep, args.max_sleep))
-    print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t{ret}\tSending {i}/{max_msgs}\t[{email}]')
+    print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t{ret}\tSending {i}/{max_msgs} [{email}]')
     if ret > 400:
         end = time.time()
         duration = end - start
