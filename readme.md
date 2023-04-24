@@ -39,7 +39,7 @@ python3 tbot.py --bot-id <bot-id> --token <token> --chat-id <chat-id>
   --name-list NAME_LIST
                         First Names Wordlist
   --surname-list SURNAME_LIST
-                        First Names Wordlist
+                        Last Names Wordlist
   --domain-list DOMAIN_LIST
                         Domains Wordlist
   --city-list CITY_LIST
