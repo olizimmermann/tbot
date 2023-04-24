@@ -7,15 +7,28 @@ import string
 import pathlib
 import urllib.parse
 
-base_url = 'https://api.telegram.org/bot'
+base_url = "https://api.telegram.org/bot"
 bot_id = ''
 token = ''
 chat_id = ''
 
 name_list_path = pathlib.Path('/usr/share/wordlists/SecLists/Usernames/Names/names.txt')
 family_name_list_path = pathlib.Path('/usr/share/wordlists/SecLists/Usernames/Names/familynames-usa-top1000.txt')
-domain_list = ['gmail.com', 'proton.me', 'aol.com', 'email.com']
+domain_list_path = pathlib.Path('/usr/share/wordlists/email_provider.txt')
 city_list_path = pathlib.Path('/usr/share/wordlists/SecLists/Miscellaneous/us-cities.txt')
+
+
+def get_list(path):
+    wordlist = []
+    with open(path, "r") as f:
+        for line in f.readlines():
+            wordlist.append(line.replace('\n',''))
+    return wordlist
+
+name_list = get_list(name_list_path)
+family_name_list = get_list(family_name_list_path)
+city_list = get_list(city_list_path)
+domain_list = get_list(domain_list_path)
 
 def random_pw(s=8, e=12):
     n = random.randint(s,e)
@@ -23,21 +36,6 @@ def random_pw(s=8, e=12):
 
 def random_email(name, family_name, domain=domain_list):
     return f'{random.choice(name).lower()}.{random.choice(family_name).lower()}@{random.choice(domain_list)}'
-
-with open(name_list_path, "r") as f:
-    name_list = []
-    for line in f.readlines():
-        name_list.append(line.replace('\n',''))
-
-with open(family_name_list_path, "r") as f:
-    family_name_list = []
-    for line in f.readlines():
-        family_name_list.append(line.replace('\n',''))
-
-with open(city_list_path, 'r') as f:
-    city_list = []
-    for line in f.readlines():
-        city_list.append(line.replace('\n',''))
 
 def send_message(msg):
     url = base_url + bot_id + ":" + token + "/sendMessage?chat_id=-" + chat_id + f"&text={msg}"
@@ -58,9 +56,9 @@ def create_msg():
     P_ORG = random.choice(family_name_list) + "-" + random.choice(family_name_list)
     
     text = """<b>OFFICE365-HTML-LOGS@ZERO</b>
-    [1] 19/04/2023
+    [1] 24/04/2023
     <b>USER-AGENT: </b>Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/P_GECKOVERSION Firefox/105.0
-    <a>seemee: @mrcew</a>
+    <a>seemee: @pwned</a>
     <b>EMAIL: </b><pre>P_EMAIL</pre>
     <b>PASSWORD: </b><a>P_PASSWORD</a>
     <b>Location: </b>IP: P_IP | CITY: P_CITY | COUNTRY: P_COUNTRYCODE | ORG: P_ORG | POSTAL: P_ZIP&parse_mode=html HTTP/2"""
@@ -78,3 +76,6 @@ for i in range(max_msgs):
     ret = send_message(txt)
     time.sleep(random.randint(1,5))
     print(f'Sending {i}/{max_msgs} {ret} from {email}')
+    if ret > 203:
+        print(f'Bot pwned after {i} messages.')
+        sys.exit(0)
