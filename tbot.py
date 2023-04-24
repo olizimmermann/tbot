@@ -81,7 +81,7 @@ parser.add_argument('--bot-id', type=str, help="ID of telegram bot", required=Tr
 parser.add_argument('--token', type=str, help="Token of telegram bot", required=True)
 parser.add_argument('--chat-id', type=str, help="Chat ID", required=True)
 parser.add_argument('--messages', type=int, help="Amount of messages", default=1, required=False)
-parser.add_argument('--text', type=str, help="Define own message to send. Will be url encoded. Use variables inside to make it random: P_IP|_EMAIL|P_PASSWORD|P_ZIP|P_CITY|P_RANDHIGHINT|P_ORG", required=False, default=None)
+parser.add_argument('--text', type=str, help="Define own message to send. Will be url encoded. Use variables inside to make it random: P_IP|P_EMAIL|P_PASSWORD|P_ZIP|P_CITY|P_RANDHIGHINT|P_ORG", required=False, default=None)
 parser.add_argument('--min-sleep', type=int, help="Min sleep time between messages", default=1, required=False)
 parser.add_argument('--max-sleep', type=int, help="Max sleep time between messages", default=4, required=False)
 parser.add_argument('--disable-check', help="Disable connectivity check", required=False, action='store_true')
