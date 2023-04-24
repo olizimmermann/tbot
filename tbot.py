@@ -86,7 +86,7 @@ parser.add_argument('--min-sleep', type=int, help="Min sleep time between messag
 parser.add_argument('--max-sleep', type=int, help="Max sleep time between messages", default=4, required=False)
 parser.add_argument('--disable-check', help="Disable connectivity check", required=False, action='store_true')
 parser.add_argument('--name-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/names.txt', help="First Names Wordlist")
-parser.add_argument('--surname-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/familynames-usa-top1000.txt', help="First Names Wordlist")
+parser.add_argument('--surname-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/familynames-usa-top1000.txt', help="Last Names Wordlist")
 parser.add_argument('--domain-list', type=str, default='/usr/share/wordlists/email_provider.txt', help="Domains Wordlist")
 parser.add_argument('--city-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/names.txt', help="City Wordlist")
 
