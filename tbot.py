@@ -18,7 +18,7 @@ _________ ______   _______ _________
    | |   |  __ (  | |   | |   | |   
    | |   | (  \ \ | |   | |   | |   
    | |   | )___) )| (___) |   | |   
-   )_(   |/ \___/ (_______)   )_(   
+   )_(   |/ \___/ (_______)   )_( by OZ  
                                     
 """
 print(header)
@@ -52,13 +52,14 @@ def create_msg(text=None):
     P_ZIP = random.randint(1000,88999)
     P_COUNTRYCODE = "".join(random.choices(string.ascii_uppercase) + random.choices(string.ascii_uppercase))
     P_CITY = random.choice(city_list)
-    P_RANDHIGHINT = str(random.randint(20000000,22000000))
+    P_RANDHIGHINT = str(random.randint(20000,22000000))
     P_ORG = random.choice(family_name_list) + "-" + random.choice(family_name_list)
     
+    today = datetime.now().strftime('%d/%m/%Y')
 
     default = """<b>OFFICE365-HTML-LOGS@ZERO</b>
-    [1] 24/04/2023
-    <b>USER-AGENT: </b>Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/P_RANDHIGHINT Firefox/105.0
+    [1] {today}
+    <b>USER-AGENT: </b>Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/P_RANDHIGHINT Firefox/P_RANDHIGHINT.0
     <a>seemee: @pwned</a>
     <b>EMAIL: </b><pre>P_EMAIL</pre>
     <b>PASSWORD: </b><a>P_PASSWORD</a>
@@ -132,11 +133,24 @@ domain_list = get_list(domain_list_path)
 start = time.time()
 
 for i in range(max_msgs):
-    txt, email = create_msg(args.text)
-    ret = send_message(txt)
-    time.sleep(random.randint(args.min_sleep, args.max_sleep))
-    print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t{ret}\tSending {i}/{max_msgs} [{email}]')
-    if ret > 400:
+    try:
+        txt, email = create_msg(args.text)
+        ret = send_message(txt)
+        time.sleep(random.randint(args.min_sleep, args.max_sleep))
+        print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t{ret}\tSending {i+1}/{max_msgs} [{email}]')
+        if ret > 400:
+            end = time.time()
+            duration = end - start
+            unit = "s"
+            if duration >=60:
+                duration = duration / 60
+                unit = "m"
+            elif duration >=3600:
+                duration = duration / 60 / 60
+                unit = "h"
+            print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t\tBot disabled after {i+1} messages. [{duration}{unit}]')
+            sys.exit(0)
+    except KeyboardInterrupt:
         end = time.time()
         duration = end - start
         unit = "s"
@@ -146,7 +160,7 @@ for i in range(max_msgs):
         elif duration >=3600:
             duration = duration / 60 / 60
             unit = "h"
-        print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\tBot disabled after {i} messages. [{duration}{unit}]')
+        print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t\tBot still active after {i+1} messages. [{duration}{unit}]')
         sys.exit(0)
 
 end = time.time()
@@ -158,5 +172,5 @@ if duration >=60:
 elif duration >=3600:
     duration = duration / 60 / 60
     unit = "h"
-print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\tBot still active after {i} messages. [{duration}{unit}]')
+print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t\tBot still active after {i+1} messages. [{duration}{unit}]')
 sys.exit(0)   
