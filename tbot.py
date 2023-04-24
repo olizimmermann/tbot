@@ -7,6 +7,7 @@ import string
 import pathlib
 import argparse
 import urllib.parse
+from datetime import datetime
 
 def get_list(path):
     wordlist = []
@@ -60,14 +61,15 @@ def create_msg(text=None):
     return text, P_EMAIL
 
 
-print('Starting mission: Phishers Attack')
-parser = argparse.ArgumentParser(description="This bot is made to fight against telegram phishing bots")
+print('Starting phishers paypack..')
+parser = argparse.ArgumentParser(description="This bot is made to fight against telegram phishing bots. It will does that with sending many randomized messages. Goal is it, that the phisher kicks out the bot and disables the used token with it.")
 parser.add_argument('--bot-id', type=str, help="ID of telegram bot", required=True)
 parser.add_argument('--token', type=str, help="Token of telegram bot", required=True)
 parser.add_argument('--chat-id', type=str, help="Chat ID", required=True)
 parser.add_argument('--messages', type=int, help="Amount of messages", default=1, required=False)
 parser.add_argument('--text', type=str, help="Define own message to send. Will be url encoded. Use variables inside to make it random: P_IP|_EMAIL|P_PASSWORD|P_ZIP|P_CITY|P_RANDHIGHINT|P_ORG", required=False, default=None)
-
+parser.add_argument('--min-sleep', type=int, help="Min sleep time between messages", default=1, required=False)
+parser.add_argument('--max-sleep', type=int, help="Max sleep time between messages", default=4, required=False)
 parser.add_argument('--disable-check', help="Disable connectivity check", required=False, action='store_true')
 parser.add_argument('--name-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/names.txt', help="First Names Wordlist")
 parser.add_argument('--surname-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/familynames-usa-top1000.txt', help="First Names Wordlist")
@@ -113,12 +115,22 @@ name_list = get_list(name_list_path)
 family_name_list = get_list(family_name_list_path)
 city_list = get_list(city_list_path)
 domain_list = get_list(domain_list_path)
+start = time.time()
 
 for i in range(max_msgs):
     txt, email = create_msg(args.text)
     ret = send_message(txt)
-    time.sleep(random.randint(1,4))
-    print(f'Sending {i}/{max_msgs} {ret} from E-Mail: {email}')
-    if ret > 203:
-        print(f'Bot pwned after {i} messages.')
+    time.sleep(random.randint(args.min_sleep, args.max_sleep))
+    print(f'{datetime.now}\t{ret}\tSending {i}/{max_msgs}\t[{email}]')
+    if ret > 400:
+        end = time.time()
+        duration = end - start
+        unit = "s"
+        if duration >=60:
+            duration = duration / 60
+            unit = "m"
+        elif duration >=3600:
+            duration = duration / 60 / 60
+            unit = "h"
+        print(f'{datetime.now}\tBot disabled after {i} messages. [{duration}{unit}]')
         sys.exit(0)
