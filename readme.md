@@ -44,4 +44,8 @@ python3 tbot.py --bot-id <bot-id> --token <token> --chat-id <chat-id>
                         Domains Wordlist
   --city-list CITY_LIST
                         City Wordlist
+  --proxy PROXY 
+                        Proxy address (without port)
+ --proxy-port PORT      
+                        Proxy Port
 ```
