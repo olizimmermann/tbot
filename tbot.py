@@ -23,8 +23,12 @@ _________ ______   _______ _________
 """
 print(header)
 
-def get_list(path):
+def get_list(path, name='wordlist'):
     wordlist = []
+    # Check if file exists
+    if not os.path.isfile(path):
+        # exit if not
+        sys.exit(f"File {name} at {path} not found!")
     with open(path, "r") as f:
         for line in f.readlines():
             wordlist.append(line.replace('\n',''))
@@ -37,9 +41,9 @@ def random_pw(s=8, e=12):
 def random_email(name, family_name, domain_list):
     return f'{random.choice(name).lower()}.{random.choice(family_name).lower()}@{random.choice(domain_list)}'
 
-def send_message(msg):
+def send_message(msg, proxy):
     url = base_url + bot_id + ":" + token + "/sendMessage?chat_id=-" + chat_id + f"&text={msg}"
-    r = requests.get(url)
+    r = requests.get(url, proxies=proxy)
     if r.ok:
         return r.status_code
     else:
@@ -85,10 +89,12 @@ parser.add_argument('--text', type=str, help="Define own message to send. Will b
 parser.add_argument('--min-sleep', type=int, help="Min sleep time between messages", default=1, required=False)
 parser.add_argument('--max-sleep', type=int, help="Max sleep time between messages", default=4, required=False)
 parser.add_argument('--disable-check', help="Disable connectivity check", required=False, action='store_true')
-parser.add_argument('--name-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/names.txt', help="First Names Wordlist")
-parser.add_argument('--surname-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/familynames-usa-top1000.txt', help="Last Names Wordlist")
-parser.add_argument('--domain-list', type=str, default='/usr/share/wordlists/email_provider.txt', help="Domains Wordlist")
-parser.add_argument('--city-list', type=str, default='/usr/share/wordlists/SecLists/Usernames/Names/names.txt', help="City Wordlist")
+parser.add_argument('--name-list', type=str, help="First Names Wordlist like John", required=True)
+parser.add_argument('--surname-list', type=str, help="Last Names Wordlist like Smith", required=True)
+parser.add_argument('--domain-list', type=str, help="Domains Wordlist like gmail.com", required=True)
+parser.add_argument('--city-list', type=str, help="City Wordlist like Berlin", required=True)
+parser.add_argument('--proxy', type=str, help="Proxy like http://proxy.com", required=False)
+parser.add_argument('--proxy-port', type=int, help="Proxy port like 9050", required=False)
 
 args = parser.parse_args()
 base_url = "https://api.telegram.org/bot"
@@ -97,9 +103,15 @@ token = args.token
 chat_id = args.chat_id
 max_msgs = args.messages
 
+# build proxy dict
+if args.proxy is not None and args.proxy_port is not None:
+    proxy = {'http': f'http://{args.proxy}:{args.proxy_port}', 'https': f'https://{args.proxy}:{args.proxy_port}'}
+else:
+    proxy = {'http': None, 'https': None}
+
 if not args.disable_check:
     # ip check 
-    r = requests.get('https://api.ipify.org')
+    r = requests.get('https://api.ipify.org', proxies=proxy)
     if r.ok:
         print(f'The public IP address which is used: {r.text}')
         print('...')
@@ -126,16 +138,16 @@ name_list_path = pathlib.Path(args.name_list)
 family_name_list_path = pathlib.Path(args.surname_list)
 domain_list_path = pathlib.Path(args.domain_list)
 city_list_path = pathlib.Path(args.city_list)
-name_list = get_list(name_list_path)
-family_name_list = get_list(family_name_list_path)
-city_list = get_list(city_list_path)
-domain_list = get_list(domain_list_path)
+name_list = get_list(name_list_path, name='First Name List')
+family_name_list = get_list(family_name_list_path, name='Last Name List')
+city_list = get_list(city_list_path, name='City List')
+domain_list = get_list(domain_list_path, name='Domain List')
 start = time.time()
 
 for i in range(max_msgs):
     try:
         txt, email = create_msg(args.text)
-        ret = send_message(txt)
+        ret = send_message(txt, proxy=proxy)
         time.sleep(random.randint(args.min_sleep, args.max_sleep))
         print(f'{datetime.now().strftime("%y/%m/%d %H:%M:%S")}\t{ret}\tSending {i+1}/{max_msgs} [{email}]')
         if ret > 400:
