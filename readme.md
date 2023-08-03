@@ -1,51 +1,71 @@
-## TBOT
 
-# Reason
-TBOT is made, to stop phish campaigns - which are using a Telegram bot as exfiltration destination. TBOT generates random messages, which suppose to flood the phishers mailbox. As soon as the phishers kicks out the used bot (and its token), the current phish campaign is useless and disarmed.
+# TBot - Stop Phish Campaigns with Telegram Bot Flooding
 
-# Requirements 
+TBot is a tool designed to stop phishing campaigns that use a Telegram bot as an exfiltration destination. It achieves this by generating random messages that flood the phishers' mailbox. As soon as the phishers kick out the used bot (and its token), the current phish campaign becomes useless and disarmed.
 
-```shell
-pip3 install requests
-pip3 install pathlib
+## Features
+
+- Floods the phishers' mailbox with random messages
+- Customizable message content using variables to add randomness
+- Adjustable sleep time between messages to simulate real user behavior
+- Option to use proxy for enhanced anonymity
+- Utilizes Telegram API for bot communication
+
+## How It Works
+
+TBot sends a specified number of random messages to the targeted chat ID using the provided Telegram bot ID and token. The custom message can be defined in the code with variables such as P_IP, P_EMAIL, P_PASSWORD, P_ZIP, P_CITY, P_RANDHIGHINT, and P_ORG, which are substituted with random values during execution.
+
+## Requirements
+
+- Python 3.x
+- `requests` library
+- `pathlib` library
+
+## Installation
+
+1. Clone the TBot repository:
+
+```
+git clone https://github.com/olizimmermann/tbot.git
+cd TBot
 ```
 
-All other needed libraries are Python default.
+2. Install the required dependencies:
 
-# Usage
-
-For an overview of all functions, use the `-h` parameter.
 ```
-python3 tbot.py -h
+pip install -r requirements.txt
 ```
 
-The required params are:
-```
+## Command Line Options
+
+```bash
 python3 tbot.py --bot-id <bot-id> --token <token> --chat-id <chat-id>
 ```
-# All functions
+
+- `-h`, `--help`: Show the help message and exit.
+- `--bot-id BOT_ID`: ID of the Telegram bot to use for communication.
+- `--token TOKEN`: Token of the Telegram bot.
+- `--chat-id CHAT_ID`: Chat ID of the target.
+- `--messages MESSAGES`: Amount of messages to send (optional, default is 10).
+- `--text TEXT`: Define a custom message to send (optional). Use variables inside to make it random (e.g., P_IP, P_EMAIL, P_PASSWORD, P_ZIP, P_CITY, P_RANDHIGHINT, P_ORG).
+- `--min-sleep MIN_SLEEP`: Minimum sleep time between messages (optional, default is 1 second).
+- `--max-sleep MAX_SLEEP`: Maximum sleep time between messages (optional, default is 5 seconds).
+- `--disable-check`: Disable connectivity check to the Telegram API (optional).
+- `--name-list NAME_LIST`: First Names Wordlist (optional).
+- `--surname-list SURNAME_LIST`: Last Names Wordlist (optional).
+- `--domain-list DOMAIN_LIST`: Domains Wordlist (optional).
+- `--city-list CITY_LIST`: City Wordlist (optional).
+- `--proxy PROXY`: Proxy address (without port) to use for requests (optional).
+- `--proxy-port PORT`: Proxy port to use (optional).
+
+## Usage Example
+
+To run TBot with the required parameters:
+
+```bash
+python3 tbot.py --bot-id <phishers-telegram-bot-id> --token <phishers-telegram-bot-token> --chat-id <target-chat-id>
 ```
- -h, --help            show this help message and exit
-  --bot-id BOT_ID       ID of telegram bot
-  --token TOKEN         Token of telegram bot
-  --chat-id CHAT_ID     Chat ID
-  --messages MESSAGES   Amount of messages
-  --text TEXT           Define own message to send. Will be url encoded. Use variables inside to make it random: P_IP|P_EMAIL|P_PASSWORD|P_ZIP|P_CITY|P_RANDHIGHINT|P_ORG
-  --min-sleep MIN_SLEEP
-                        Min sleep time between messages
-  --max-sleep MAX_SLEEP
-                        Max sleep time between messages
-  --disable-check       Disable connectivity check
-  --name-list NAME_LIST
-                        First Names Wordlist
-  --surname-list SURNAME_LIST
-                        Last Names Wordlist
-  --domain-list DOMAIN_LIST
-                        Domains Wordlist
-  --city-list CITY_LIST
-                        City Wordlist
-  --proxy PROXY 
-                        Proxy address (without port)
- --proxy-port PORT      
-                        Proxy Port
-```
+
+## Disclaimer
+
+Using this tool to flood any mailbox, including phishers', may have legal consequences. Please use this tool responsibly and only in accordance with the applicable laws and regulations.
