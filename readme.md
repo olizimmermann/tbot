@@ -33,7 +33,8 @@ cd TBot
 2. Install the required dependencies:
 
 ```
-pip install -r requirements.txt
+pip install requests
+pip install pathlib
 ```
 
 ## Command Line Options
